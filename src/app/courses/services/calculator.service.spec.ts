@@ -14,7 +14,7 @@ describe('CalcuatorService', () => {
                 CalculatorService,
                 { provide: LoggerService, useValue: loggerSpy }
             ]
-        })
+        });
         calculator = TestBed.inject(CalculatorService);
     });
 
