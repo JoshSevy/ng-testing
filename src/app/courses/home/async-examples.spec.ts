@@ -4,8 +4,7 @@ import { Observable, of, scheduled } from "rxjs";
 import { delay } from "rxjs/operators";
 
 
-fdescribe('Async Testing Examples', () => {
-
+describe('Async Testing Examples', () => {
 
   it('Async test example with jasmine done()', (done: DoneFn) => {
 

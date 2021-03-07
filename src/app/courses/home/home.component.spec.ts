@@ -1,5 +1,5 @@
 import { DebugElement } from "@angular/core";
-import { ComponentFixture, TestBed } from "@angular/core/testing"
+import { ComponentFixture, fakeAsync, flush, TestBed, waitForAsync } from "@angular/core/testing"
 import { By } from "@angular/platform-browser";
 import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { of } from "rxjs";
@@ -22,7 +22,7 @@ describe('HomeComponent', () => {
   const advancedCourses = setupCourses()
     .filter(course => course.category === "ADVANCED");
 
-  beforeEach(async() => {
+  beforeEach(waitForAsync(() => {
 
     const coursesServiceSpy = jasmine.createSpyObj('CoursesService', ['findAllCourses']);
     TestBed.configureTestingModule({
@@ -40,7 +40,7 @@ describe('HomeComponent', () => {
         el = fixture.debugElement;
         coursesService = TestBed.inject(CoursesService);
       });
-  });
+  }));
 
   it('should create the component', () => {
     expect(component).toBeTruthy();
@@ -74,7 +74,7 @@ describe('HomeComponent', () => {
     expect(tabs.length).toBe(2, "Expected 2 tabs to be found");
   });
 
-  it('should display advanced courses when tab clicked', (done: DoneFn) => {
+  it('should display advanced courses when tab clicked', waitForAsync(() => {
     coursesService.findAllCourses.and.returnValue(of(setupCourses()));
 
     fixture.detectChanges();
@@ -87,18 +87,13 @@ describe('HomeComponent', () => {
 
     fixture.detectChanges();
 
-    setTimeout(() => {
+    fixture.whenStable().then(() => {
       const cardTitles = el.queryAll(By.css('.mat-tab-body-active .mat-card-title'));
-
-      console.log(cardTitles);
 
       expect(cardTitles.length).toBeGreaterThan(0, "Could not find card titles");
 
-      expect(cardTitles[0].nativeElement.textContent).toContain("Angular Security Course")
+      expect(cardTitles[0].nativeElement.textContent).toContain("Angular Security Course");
+    })
 
-      done();
-
-    }, 500);
-
-  });
+  }));
 })
