@@ -1,5 +1,8 @@
 import { fakeAsync, flush, flushMicrotasks, tick } from "@angular/core/testing";
 
+import { Observable, of, scheduled } from "rxjs";
+import { delay } from "rxjs/operators";
+
 
 fdescribe('Async Testing Examples', () => {
 
@@ -76,6 +79,24 @@ fdescribe('Async Testing Examples', () => {
 
       expect(counter).toBe(11);
   }));
+
+  it('Async test example - Observables', fakeAsync(() => {
+    let test = false;
+
+    console.log('Creating Observables');
+
+    const test$ = of(test).pipe(delay(500));
+
+    test$.subscribe(() => {
+      test = true;
+    });
+
+    tick(500);
+
+    console.log('Running test Assertion');
+
+    expect(test).toBe(true);
+  }))
 
 
 })
